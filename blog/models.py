@@ -7,6 +7,10 @@ class Post(models.Model):
     title = models.CharField(max_length=30)
     content = models.TextField()
 
+    # %Y 2022, %y 22
+    head_image = models.ImageField(upload_to='blog/images/%Y/%m/%d/', blank = True)
+    #이거의 시작은 어디냐..,,,, 그리고 blog앞에는 _media생략?
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
