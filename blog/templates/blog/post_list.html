@@ -99,10 +99,13 @@
   <div class="container">
     <div class="row">
 
-      <div class="col-md-8 col-lg-9" style="background-color:rgb(247, 228, 231)">
+<!--      main-area  -->
+      <div class="col-md-8 col-lg-9"  style="background-color:rgb(247, 228, 231)" id="main-area">
         <h2>blog</h2>
 
 <!-- 게시글!!-->
+        {% if post_list.exists %}
+
         {% for p in post_list %}
         <div class="card mb-4">
 
@@ -129,6 +132,11 @@
           </div>
         </div>
         {% endfor %}
+
+        {% else %}
+        <h5>아무 게시물이 없습니다.</h5>
+        {% endif %}
+
 
         <nav aria-label="Pagination">
           <hr class="my-0" />
