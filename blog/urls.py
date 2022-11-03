@@ -7,7 +7,8 @@ urlpatterns = [
 
     ## CBV
     path('',views.PostList.as_view()),
-    path('<int:pk>/', views.PostDetail.as_view())
+    path('<int:pk>/', views.PostDetail.as_view()),
+    path('category/<str:slug>/',views.category_page)
 
 
 ]

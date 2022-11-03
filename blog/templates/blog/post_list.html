@@ -3,14 +3,17 @@
 {% block main_area %}
 <!--      main-area  -->
 <!--      <div class="col-md-8 col-lg-9"  style="background-color:rgb(247, 228, 231)" id="main-area">-->
-        <h2>blog</h2>
+        <h2>blog
+            {% if category %}
+                - <span class="badge badge-secondary">{{ category }}</span>
+            {% endif %}
+        </h2>
 
 <!-- 게시글!!-->
         {% if post_list.exists %}
 
         {% for p in post_list %}
-        <div class="card mb-4">
-
+        <div class="card mb-4" id="post-{{ p.pk }}">
           {% if p.head_image %}
           <img class="card-img-top" src="{{ p.head_image.url }}" alt="{{p}}의 head_image" />
           {% else %}
@@ -18,7 +21,18 @@
           {% endif %}
 
 
+
           <div class="card-body">
+
+              {% if p.category %}
+              <span class="badge badge-secondary float-right">
+                  <a href="{{ p.category.get_absolute_url }}">{{ p.category }}</a>
+              </span>
+              {% else %}
+              <span class="badge badge-secondary float-right">
+                  <a href="/blog/category/no_category/">미분류</a>
+              </span>
+              {% endif %}
 
             <h2 class="card-title">{{ p.title | upper }}</h2>
             {% if p.hook_text %}

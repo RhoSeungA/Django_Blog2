@@ -1,8 +1,24 @@
 from django.db import models
 from django.contrib.auth.models import User
 import os
+# python manage.py startapp blog -> installed app에 추가하기
+
 
 # Create your models here.
+class Category(models.Model):
+        name = models.CharField(max_length=50, unique=True)#unique true 똑같은거 막음
+        slug = models.SlugField(max_length=200, unique=True, allow_unicode=True)#한글허용?
+
+        def __str__(self):
+            return self.name
+        def get_absolute_url(self):
+            return f'/blog/category/{self.slug}/'
+        #f는 스트링 문자열이라는뜻
+
+        class Meta:
+            verbose_name_plural='Categories'
+
+
 
 class Post(models.Model):
     title = models.CharField(max_length=30)
@@ -21,7 +37,8 @@ class Post(models.Model):
 
     #author 추후 작성
     author = models.ForeignKey(User, null=True ,on_delete=models.SET_NULL)#models.CASCADE
-
+    category=models.ForeignKey(Category, null=True,blank=True ,on_delete=models.SET_NULL)
+    #blank= true가 있어야 필드가 아무것도 없어도 허용
 
     def __str__(self):
         return f'[{self.pk}]{self.title} :: {self.author} : {self.created_at}'
