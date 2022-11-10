@@ -27,6 +27,14 @@
                             {% endif %}
 
                         </header>
+
+                        {% if user.is_authenticated and user == post.author %}
+                           <a href="/blog/update_post/{{post.pk}}/" role="button" class="btn btn-info btn-sm float-right">
+                               <i class="fas fa-pen"></i>    Edit Post</a>
+                        <br><br>
+
+                        {% endif %}
+
                         <!-- Preview image figure-->
 
                         <figure class="mb-4">
