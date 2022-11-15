@@ -61,6 +61,7 @@ class PostCreate(LoginRequiredMixin,UserPassesTestMixin,CreateView):
 
     def test_func(self):
         return self.request.user.is_superuser or self.request.user.is_staff
+
     def form_valid(self, form):#request는 client??
         current_User=self.request.user
         if current_User.is_authenticated and (current_User.is_superuser or current_User.is_staff):
@@ -74,6 +75,9 @@ class PostCreate(LoginRequiredMixin,UserPassesTestMixin,CreateView):
                 for t in tags_list:
                     t = t.strip()
                     tag, is_tag_created = Tag.objects.get_or_create(name=t)
+                    #get_or_created는 튜플 반환
+                    #뒤에는 created되면 참 반환?
+                    #tag에는 가져온거.
                     if is_tag_created:
                         tag.slug = slugify(t, allow_unicode=True)
                         tag.save()
