@@ -1,5 +1,5 @@
 from django.shortcuts import render ,redirect
-from .models import Post,Category,Tag
+from .models import Post,Category,Tag ,Comment
 from django.views.generic import ListView,DetailView,CreateView,UpdateView ##장고에서 제공
 from django.contrib.auth.mixins import  LoginRequiredMixin,UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
@@ -161,7 +161,7 @@ def new_comment(request,pk):
             if comment_form.is_valid():
                 comment = comment_form.save(commit=False)
                 comment.post = post
-                comment.author=request.user
+                comment.author = request.user
                 comment.save()
                 return redirect(comment.get_absolute_url())
         else: #GET으로 온 경우
@@ -170,7 +170,17 @@ def new_comment(request,pk):
         raise PermissionDenied
 
 
+class CommentUpdate(LoginRequiredMixin,UpdateView):
+    model = Comment
+    form_class = CommentForm
+    #CreateView,UpdateView 이던지,,, form을 사용하면, 템플릿이 model명_forms로 자동을 만들어짐.
+    # 템플릿 모델명_forms : comment_form
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and request.user == self.get_object().author:
+            return super(CommentUpdate,self).dispatch(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
 
 
 
