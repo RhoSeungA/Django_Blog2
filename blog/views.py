@@ -6,6 +6,7 @@ from django.core.exceptions import PermissionDenied
 from django.utils.text import slugify
 from .forms import CommentForm
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
 # Create your views here.
 
@@ -100,6 +101,9 @@ class PostCreate(LoginRequiredMixin,UserPassesTestMixin,CreateView):
         context['no_category_post_count']= Post.objects.filter(category=None).count
         return context
 
+
+
+
 class PostList(ListView):## ListView 장고에서 제공
     model = Post
     ordering = '-pk'
@@ -112,6 +116,25 @@ class PostList(ListView):## ListView 장고에서 제공
 
     # 템플릿 모델명_list.html : post_list.html (템플릿 이름 자동으로 생성?) --> index.html 이름 수정
     #자동으로 전달되는 데이터/ 파라메터/-->  모델명_list 형태로 전달. -->post_list 형태로 전달
+
+class PostSearch(PostList):#ListView 상속,post_list,post_list.html 자동 호출
+    paginated_by=None
+
+    def get_queryset(self):#listview 가 제공해주는 함수
+    #queryseㅅ --> 검색 결과,검색 결과 얻는 함수
+        q = self.kwargs['q']
+        post_list = Post.objects.filter(
+            Q(title__contains=q) |
+            Q(tags__name__contains=q)
+        ).distinct()
+        return post_list
+    def get_context_data(self, *,object_list=None,**kwargs):
+        context = super(PostSearch,self).get_context_data()
+        q = self.kwargs['q']
+        context['search_info'] = f'Search : {q}({self.get_queryset().count()})'
+        return context
+
+
 
 class PostDetail(DetailView):
     model = Post

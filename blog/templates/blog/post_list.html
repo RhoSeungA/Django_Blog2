@@ -12,6 +12,10 @@
 <!--      main-area  -->
 <!--      <div class="col-md-8 col-lg-9"  style="background-color:rgb(247, 228, 231)" id="main-area">-->
         <h2>blog
+             {% if search_info %}
+              <span class="badge badge-secondary">{{ search_info }}</span>
+              {% endif %}
+
             {% if category %}
                 - <span class="badge badge-secondary">{{ category }}</span>
             {% endif %}
