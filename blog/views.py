@@ -103,12 +103,13 @@ class PostCreate(LoginRequiredMixin,UserPassesTestMixin,CreateView):
 class PostList(ListView):## ListView 장고에서 제공
     model = Post
     ordering = '-pk'
-
+    paginate_by = 5
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(PostList,self).get_context_data()
         context['categories'] = Category.objects.all()
         context['no_category_post_count']= Post.objects.filter(category=None).count
         return context
+
     # 템플릿 모델명_list.html : post_list.html (템플릿 이름 자동으로 생성?) --> index.html 이름 수정
     #자동으로 전달되는 데이터/ 파라메터/-->  모델명_list 형태로 전달. -->post_list 형태로 전달
 
