@@ -66,6 +66,11 @@ class Post(models.Model):
         return self.get_file_name().split('.')[-1] #~.txt 나 ~.xlsx 여기서 확장자만 분리해야함. split으로 분리
         #a.txt이면,,, [0]은 a이고, [1]은 txt
         #근데 문제는 a.b.x.txt 같은 형태고 있음, 따라서 -1로 해주는 것이 좋음.
+    def get_avatar_url(self):
+        if self.author.socialaccount_set.exists():
+            return self.author.socialaccount_set.first().get_avatar_url()
+        else:
+            return f'https://dummyimage.com/50x50/ced4da/6c757d.jpg'
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
